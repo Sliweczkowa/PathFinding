@@ -1,6 +1,9 @@
 #!/usr/bin/env julia
 
-println("Precise path to the file with map:")
+include("pathFinding.jl")
+using .pathFinding
+
+print("Precise path to the file with map: ")
 open(readline()) do fileWithMap
 
     # Reading data from .map file
@@ -15,4 +18,6 @@ open(readline()) do fileWithMap
     for i in 1:height
         arrayWithMap[i] = readline(fileWithMap)
     end
+
+    dijkstra(arrayWithMap)
 end
