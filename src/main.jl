@@ -19,5 +19,14 @@ open(readline()) do fileWithMap
         arrayWithMap[i] = readline(fileWithMap)
     end
 
-    dijkstra(arrayWithMap)
+    print("Precise depart x-coordinate: ")
+    start_x = parse(Int, readline())
+    print("Precise depart y-coordinate: ")
+    start_y = parse(Int, readline())
+    print("Precise arrival x-coordinate: ")
+    final_x = parse(Int, readline())
+    print("Precise arrival y-coordinate: ")
+    final_y = parse(Int, readline())
+
+    println("The shortest path distance is: $(dijkstra(arrayWithMap, start_x, start_y, final_x, final_y))")
 end

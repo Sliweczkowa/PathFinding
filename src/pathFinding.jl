@@ -1,16 +1,15 @@
 module pathFinding
     export dijkstra
 
-    function dijkstra(map::Array{String, 1})
-        # TODO: check if coordinates are passable and int
-        print("Precise depart x-coordinate: ")
-        start_x = parse(Int, readline())
-        print("Precise depart y-coordinate: ")
-        start_y = parse(Int, readline())
-        print("Precise arrival x-coordinate: ")
-        final_x = parse(Int, readline())
-        print("Precise arrival y-coordinate: ")
-        final_y = parse(Int, readline())
+    function dijkstra(
+        map::Array{String, 1},
+        start_x::Int, start_y::Int,
+        final_x::Int, final_y::Int
+        )::Int
+
+        if isExplorable(map[start_y][start_x]) == false ||isExplorable(map[final_y][final_x]) == false
+            throw(ArgumentError("Invalid map coordinates: Unpassable terrain"))
+        end
 
         current_x = start_x
         current_y = start_y
@@ -35,36 +34,28 @@ module pathFinding
 
         while isExplored[final_y, final_x] == 0
             if current_x > 1 &&
-                map[current_y][current_x-1] != '@' &&
-                map[current_y][current_x-1] != 'O' &&
-                map[current_y][current_x-1] != 'T' &&
+                isExplorable(map[current_y][current_x-1]) &&
                 isExplored[current_y, current_x-1] == 0 &&
                 distance[current_y, current_x] + 1 < distance[current_y, current_x-1]
                     distance[current_y, current_x-1] = distance[current_y, current_x] + 1
                     push!(avaiableLocations, (current_y, current_x-1))
             end
             if current_y > 1 &&
-                map[current_y-1][current_x] != '@' &&
-                map[current_y-1][current_x] != 'O' &&
-                map[current_y-1][current_x] != 'T' &&
+                isExplorable(map[current_y-1][current_x]) &&
                 isExplored[current_y-1, current_x] == 0 &&
                 distance[current_y, current_x] + 1 < distance[current_y-1, current_x]
                     distance[current_y-1, current_x] = distance[current_y, current_x] + 1
                     push!(avaiableLocations, (current_y-1, current_x))
             end
             if current_x < length(map[1]) &&
-                map[current_y][current_x+1] != '@' &&
-                map[current_y][current_x+1] != 'O' &&
-                map[current_y][current_x+1] != 'T' &&
+                isExplorable(map[current_y][current_x+1]) &&
                 isExplored[current_y, current_x+1] == 0 &&
                 distance[current_y, current_x] + 1 < distance[current_y, current_x+1]
                     distance[current_y, current_x+1] = distance[current_y, current_x] + 1
                     push!(avaiableLocations, (current_y, current_x+1))
             end
             if current_y < length(map) &&
-                map[current_y+1][current_x] != '@' &&
-                map[current_y+1][current_x] != 'O' &&
-                map[current_y+1][current_x] != 'T' &&
+                isExplorable(map[current_y+1][current_x]) &&
                 isExplored[current_y+1, current_x] == 0 &&
                 distance[current_y, current_x] + 1 < distance[current_y+1, current_x]
                     distance[current_y+1, current_x] = distance[current_y, current_x] + 1
@@ -89,4 +80,15 @@ module pathFinding
 
         return distance[final_y, final_x]
     end
+
+    function isExplorable(c::Char)::Bool
+        if c == '@' || c == 'O' || c == 'T'
+            return false
+        elseif c == '.' || c == 'G' || c == 'S' || c == 'W'
+            return true
+        else
+            throw(ArgumentError("Invalid map argument"))
+        end
+    end
+
 end
