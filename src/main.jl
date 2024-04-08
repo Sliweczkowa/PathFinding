@@ -1,21 +1,30 @@
 #!/usr/bin/env julia
 
-include("pathFinding.jl")
-using .pathFinding
+module main
+    include("pathFinding.jl")
+    using .pathFinding
 
-include("mapOperations.jl")
-using .mapOperations
+    include("mapOperations.jl")
+    using .mapOperations
 
-print("Precise path to the file with map: ")
-pathToFile = readline();
+    include("clApp.jl")
+    using .clApp
 
-print("Precise depart x-coordinate: ")
-start_x = parse(Int, readline())
-print("Precise depart y-coordinate: ")
-start_y = parse(Int, readline())
-print("Precise arrival x-coordinate: ")
-final_x = parse(Int, readline())
-print("Precise arrival y-coordinate: ")
-final_y = parse(Int, readline())
+    export algoDijkstra, algoAstar, clDijkstra, clAStar
 
-println("The shortest path distance is: $(dijkstra(loadMapFromFile(pathToFile), start_x, start_y, final_x, final_y))")
+    function algoDijkstra(
+        fname::String,
+        D::Tuple{Int64, Int64},
+        A::Tuple{Int64, Int64}
+    )::Void
+        dijkstra(loadMapFromFile(fname), D[2], D[1], A[2], A[1])
+    end
+
+    function algoAstar(
+        fname::String,
+        D::Tuple{Int64, Int64},
+        A::Tuple{Int64, Int64}
+    )::Void
+        aStar(loadMapFromFile(fname), D[2], D[1], A[2], A[1])
+    end
+end
