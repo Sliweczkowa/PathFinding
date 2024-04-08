@@ -3,7 +3,7 @@
 ## A little bit about the project
 
 This project implements two pathfinding algorithms: Dijkstra's Algorithm and A* in Julia.
-The program is a CLI application finding the shortest path between two points on a map while avoiding obstacles.
+The program consists in finding the shortest path between two points on a map while avoiding obstacles either by command line or CLI application.
 
 ## Prerequisites
 
@@ -17,9 +17,15 @@ This project is licensed under the MIT License. See the `LICENSE` file for detai
 
 1. Clone this repository to your local machine
 2. Open the terminal and navigate to project directory 
-3. Prepare a .map file according to the format on the following site *https://movingai.com/benchmarks/formats.html*
-4. Run the main file with *src/main.jl* command
-5. Follow command line instructions
+3. Prepare a .map file according to the format on the following site *https://movingai.com/benchmarks/formats.html* and a path to it
+4. Run *julia* and add the main file with *include("src/main.jl")* and *using .main* commands
+5. You can now use algorithms directly:
+    - algoDijkstra(path_to_file::String, start_coordinates::Tuple{Int64, Int64}, finish_coordinates::Tuple{Int64, Int64})
+    - algoAStar(path_to_file::String, start_coordinates::Tuple{Int64, Int64}, finish_coordinates::Tuple{Int64, Int64})
+
+    or by command line interface:
+    - clDijkstra()
+    - clAStar()
 
 ## Known issues (Work in progress)
 
@@ -35,7 +41,3 @@ The project has been tested on Linux only, therefore there may be compatibility 
 ### Lack of Unit Tests
 
 The project currently lacks comprehensive unit tests to validate the correctness and robustness of the implemented algorithms and features. Without proper test coverage, there is a higher risk of undetected bugs or regressions in the codebase. Future updates will include the addition of unit tests to ensure the reliability and stability of the project.
-
-### Planned Implementation of A* Algorithm
-
-The current version of the project implements only the Dijkstra's Algorithm for pathfinding. Stay tuned for updates as the project progresses towards integrating the A* algorithm!
