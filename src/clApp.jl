@@ -1,3 +1,5 @@
+# TODO: Actualise CLI
+
 module clApp
     include("pathFinding.jl")
     using .pathFinding

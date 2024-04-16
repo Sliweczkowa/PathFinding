@@ -1,5 +1,6 @@
 module mapOperations
     using Images
+    import Main.mapProperties
 
     export loadMapFromFile, mapToPNG
 

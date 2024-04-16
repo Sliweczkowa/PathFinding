@@ -1,16 +1,7 @@
+# TODO: check terrain type before adding to vector
+
 module pathFinding
-
-    mutable struct MapPoint
-        terrainType::Char
-        isVisited::Bool
-        distanceFromStart::Float32
-        distanceToFinal::Int32
-        previousLocation::Tuple{Int, Int}
-
-        function MapPoint(terrainType::Char)
-            return new(terrainType, false, Inf32, 0, (0, 0))
-        end
-    end
+    import Main.mapProperties
 
     export dijkstra, aStar
 
@@ -18,7 +9,7 @@ module pathFinding
         map::Array{Char, 2},
         start_x::Int, start_y::Int,
         final_x::Int, final_y::Int
-    )::Tuple{Int, Int}
+    )::Tuple{Array{mapProperties.MapPoint, 2}, Int, Int}
 
         # Terrain start and finish check
         if isTerrainExplorable(map[start_y, start_x]) == false || isTerrainExplorable(map[final_y, final_x]) == false
@@ -30,10 +21,10 @@ module pathFinding
         width = size(map, 2)
 
         # Info about map initially unknown
-        mapInfo = Array{MapPoint, 2}(undef, height, width)
+        mapInfo = Array{mapProperties.MapPoint, 2}(undef, height, width)
         for i in 1:height
             for j in 1:width
-                mapInfo[i, j] = MapPoint(map[i, j])
+                mapInfo[i, j] = mapProperties.MapPoint(map[i, j])
             end  
         end
 
@@ -43,9 +34,6 @@ module pathFinding
         # Array of reachable points
         reachableLocations = Array{Tuple{Int, Int}}(undef, 0)
         push!(reachableLocations, (start_y, start_x))
-
-        # Evaluation count
-        count = 1
 
         while !isempty(reachableLocations)
             
@@ -70,7 +58,7 @@ module pathFinding
                     mapInfo[current_y, current_x-1].distanceFromStart = mapInfo[current_y, current_x].distanceFromStart + 1
                     mapInfo[current_y, current_x-1].previousLocation = (current_y, current_x)
                     push!(reachableLocations, (current_y, current_x-1))
-                    count += 1
+                    mapInfo[current_y-1, current_x].isConsidered = true
             end
             if current_y-1 >= 1 &&
                 isTerrainExplorable(mapInfo[current_y-1, current_x].terrainType) &&
@@ -79,7 +67,7 @@ module pathFinding
                         mapInfo[current_y-1, current_x].distanceFromStart = mapInfo[current_y, current_x].distanceFromStart + 1
                         mapInfo[current_y-1, current_x].previousLocation = (current_y, current_x)
                         push!(reachableLocations, (current_y-1, current_x))
-                        count += 1
+                        mapInfo[current_y-1, current_x].isConsidered = true
                 end
             if current_x+1 <= width &&
                 isTerrainExplorable(mapInfo[current_y, current_x+1].terrainType) &&
@@ -88,7 +76,7 @@ module pathFinding
                         mapInfo[current_y, current_x+1].distanceFromStart = mapInfo[current_y, current_x].distanceFromStart + 1
                         mapInfo[current_y, current_x+1].previousLocation = (current_y, current_x)
                         push!(reachableLocations, (current_y, current_x+1))
-                        count += 1
+                        mapInfo[current_y-1, current_x].isConsidered = true
             end
             if current_y+1 <= height &&
                 isTerrainExplorable(mapInfo[current_y+1, current_x].terrainType) &&
@@ -97,7 +85,7 @@ module pathFinding
                         mapInfo[current_y+1, current_x].distanceFromStart = mapInfo[current_y, current_x].distanceFromStart + 1
                         mapInfo[current_y+1, current_x].previousLocation = (current_y, current_x)
                         push!(reachableLocations, (current_y+1, current_x))
-                        count += 1
+                        mapInfo[current_y-1, current_x].isConsidered = true
             end
 
             # Analyse of current location finished
@@ -107,13 +95,14 @@ module pathFinding
         end
 
         if mapInfo[final_y, final_x].distanceFromStart != Inf32
-            return mapInfo[final_y, final_x].distanceFromStart, count
+            return mapInfo, final_y, final_x
         else
             throw(ArgumentError("No possible path"))
         end
         
     end
 
+    # TODO: Actualise A* in pathFinding
     function aStar(
         map::Array{Char, 2},
         start_x::Int, start_y::Int,
@@ -145,9 +134,6 @@ module pathFinding
         reachableLocations = Array{Tuple{Int, Int}}(undef, 0)
         push!(reachableLocations, (start_y, start_x))
 
-        # Evaluation count
-        count = 1
-
         while !isempty(reachableLocations)
             
             # Location with the smallest distance form start + to final as new current location
@@ -171,7 +157,7 @@ module pathFinding
                     mapInfo[current_y, current_x-1].distanceFromStart = mapInfo[current_y, current_x].distanceFromStart + 1
                     mapInfo[current_y, current_x-1].previousLocation = (current_y, current_x)
                     push!(reachableLocations, (current_y, current_x-1))
-                    count += 1
+                    mapInfo[current_y-1, current_x].isConsidered = true
             end
             if current_y-1 >= 1 &&
                 isTerrainExplorable(mapInfo[current_y-1, current_x].terrainType) &&
@@ -180,7 +166,7 @@ module pathFinding
                         mapInfo[current_y-1, current_x].distanceFromStart = mapInfo[current_y, current_x].distanceFromStart + 1
                         mapInfo[current_y-1, current_x].previousLocation = (current_y, current_x)
                         push!(reachableLocations, (current_y-1, current_x))
-                        count += 1
+                        mapInfo[current_y-1, current_x].isConsidered = true
             end
             if current_x+1 <= width &&
                 isTerrainExplorable(mapInfo[current_y, current_x+1].terrainType) &&
@@ -189,7 +175,7 @@ module pathFinding
                         mapInfo[current_y, current_x+1].distanceFromStart = mapInfo[current_y, current_x].distanceFromStart + 1
                         mapInfo[current_y, current_x+1].previousLocation = (current_y, current_x)
                         push!(reachableLocations, (current_y, current_x+1))
-                        count += 1
+                        mapInfo[current_y-1, current_x].isConsidered = true
             end
             if current_y+1 <= height &&
                 isTerrainExplorable(mapInfo[current_y+1, current_x].terrainType) &&
@@ -198,7 +184,7 @@ module pathFinding
                         mapInfo[current_y+1, current_x].distanceFromStart = mapInfo[current_y, current_x].distanceFromStart + 1
                         mapInfo[current_y+1, current_x].previousLocation = (current_y, current_x)
                         push!(reachableLocations, (current_y+1, current_x))
-                        count += 1
+                        mapInfo[current_y-1, current_x].isConsidered = true
             end
 
             # Analyse of current location finished
