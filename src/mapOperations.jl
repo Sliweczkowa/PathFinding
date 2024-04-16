@@ -1,5 +1,7 @@
 module mapOperations
-    export loadMapFromFile, displayMap
+    using Images
+
+    export loadMapFromFile, mapToPNG
 
     function loadMapFromFile(
         pathToFile::String
@@ -21,13 +23,29 @@ module mapOperations
         end
     end
 
-    function displayMap(
-        map::Array{Char, 2}
+    function mapToPNG(
+        map::Array{Char, 2},
+        filename::String
     )::Nothing
 
-        for i in 1:size(map, 1)
-            print(join(map[i, 1:end]), '\n')
+        hashmap = Dict{Char, RGB{N0f8}}(
+            '.' => colorant"white",
+            'G' => colorant"white",
+            '@' => colorant"black",
+            'O' => colorant"black",
+            'T' => colorant"green",
+            'S' => colorant"saddlebrown",
+            'W' => colorant"blue"
+        )
+
+        rgbMap = Array{RGB{N0f8}, 2}(undef, size(map)[1], size(map)[2])
+        for i in 1:size(map)[1]
+            for j in 1:size(map)[2]
+                rgbMap[i, j] = hashmap[map[i, j]]
+            end
         end
+        save("out/$filename.png", rgbMap)
+
     end
 
 end
