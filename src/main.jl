@@ -20,19 +20,18 @@ module main
         D::Tuple{Int64, Int64},
         A::Tuple{Int64, Int64}
     )::Nothing
-        x = dijkstra(loadMapFromFile(fname), D[2], D[1], A[2], A[1])
+        x = waStar(loadMapFromFile(fname), D[1], D[2], A[1], A[2], 0.0)
         println("The shortest found distance is: ", x[1][A[2], A[1]].distanceFromStart)
         # println("Considered points: ", count(x[1][1:end, 1:end].isConsidered))
     end
 
-    # TODO: Actualise A* in main
     function algoAstar(
         fname::String,
         D::Tuple{Int64, Int64},
         A::Tuple{Int64, Int64}
     )::Nothing
-        x = aStar(loadMapFromFile(fname), D[2], D[1], A[2], A[1])
-        println("The shortest found distance is: ", x[1])
-        println("Considered points: ", x[2])
+        x = waStar(loadMapFromFile(fname), D[1], D[2], A[1], A[2], 0.5)
+        println("The shortest found distance is: ", x[1][A[2], A[1]].distanceFromStart)
+        # println("Considered points: ", count(x[1][1:end, 1:end].isConsidered))
     end
 end
