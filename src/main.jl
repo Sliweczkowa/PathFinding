@@ -1,7 +1,6 @@
 #!/usr/bin/env julia
 
 # TODO: fix need to include mapProperties
-# TODO: considered points count
 
 module main
     include("pathFinding.jl")
@@ -22,7 +21,7 @@ module main
     )::Nothing
         x = waStar(loadMapFromFile(fname), D[1], D[2], A[1], A[2], 0.0)
         println("The shortest found distance is: ", x[1][A[2], A[1]].distanceFromStart)
-        # println("Considered points: ", count(x[1][1:end, 1:end].isConsidered))
+        println("Considered points: ", count(a -> a.isConsidered, x[1]))
     end
 
     function algoAstar(
@@ -32,6 +31,6 @@ module main
     )::Nothing
         x = waStar(loadMapFromFile(fname), D[1], D[2], A[1], A[2], 0.5)
         println("The shortest found distance is: ", x[1][A[2], A[1]].distanceFromStart)
-        # println("Considered points: ", count(x[1][1:end, 1:end].isConsidered))
+        println("Considered points: ", count(a -> a.isConsidered, x[1]))
     end
 end
