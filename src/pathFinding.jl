@@ -1,5 +1,3 @@
-# TODO: check terrain type before adding to vector
-
 module pathFinding
     import Main.mapProperties
 

@@ -2,7 +2,6 @@
 
 # TODO: fix need to include mapProperties
 # TODO: considered points count
-# TODO: x-y problem
 
 module main
     include("pathFinding.jl")
