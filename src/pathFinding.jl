@@ -35,7 +35,7 @@ module pathFinding
         reachableLocations = Array{Tuple{Int, Int}}(undef, 0)
         push!(reachableLocations, (start_y, start_x))
 
-        while !isempty(reachableLocations)
+        while !mapInfo[final_y, final_x].isVisited
             
             # Closest location as new current location
             min_distance = mapInfo[reachableLocations[1][1], reachableLocations[1][2]].distanceFromStart
@@ -51,7 +51,7 @@ module pathFinding
             mapInfo[current_y, current_x].isVisited = true
 
             # Distance initialisation, Array push for currently reachable locations
-            if current_x-1 >= 1 &&
+            if current_x-1 > 1 &&
             isTerrainExplorable(mapInfo[current_y, current_x-1].terrainType) &&
             mapInfo[current_y, current_x-1].isVisited == false &&
             mapInfo[current_y, current_x-1].distanceFromStart > mapInfo[current_y, current_x].distanceFromStart + 1
@@ -60,7 +60,7 @@ module pathFinding
                     push!(reachableLocations, (current_y, current_x-1))
                     mapInfo[current_y-1, current_x].isConsidered = true
             end
-            if current_y-1 >= 1 &&
+            if current_y-1 > 1 &&
                 isTerrainExplorable(mapInfo[current_y-1, current_x].terrainType) &&
                 mapInfo[current_y-1, current_x].isVisited == false &&
                 mapInfo[current_y-1, current_x].distanceFromStart > mapInfo[current_y, current_x].distanceFromStart + 1
@@ -69,7 +69,7 @@ module pathFinding
                         push!(reachableLocations, (current_y-1, current_x))
                         mapInfo[current_y-1, current_x].isConsidered = true
                 end
-            if current_x+1 <= width &&
+            if current_x+1 < width &&
                 isTerrainExplorable(mapInfo[current_y, current_x+1].terrainType) &&
                 mapInfo[current_y, current_x+1].isVisited == false &&
                 mapInfo[current_y, current_x+1].distanceFromStart > mapInfo[current_y, current_x].distanceFromStart + 1
@@ -78,7 +78,7 @@ module pathFinding
                         push!(reachableLocations, (current_y, current_x+1))
                         mapInfo[current_y-1, current_x].isConsidered = true
             end
-            if current_y+1 <= height &&
+            if current_y+1 < height &&
                 isTerrainExplorable(mapInfo[current_y+1, current_x].terrainType) &&
                 mapInfo[current_y+1, current_x].isVisited == false &&
                 mapInfo[current_y+1, current_x].distanceFromStart > mapInfo[current_y, current_x].distanceFromStart + 1
