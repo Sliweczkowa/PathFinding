@@ -32,9 +32,9 @@ module mapOperations
         'T' => colorant"green",
         'S' => colorant"saddlebrown",
         'W' => colorant"blue",
-        "considered" => colorant"pink1",
-        "visited" => colorant"pink2",
-        "path" => colorant"pink3"
+        "considered" => colorant"gray40",
+        "visited" => colorant"gray25",
+        "path" => colorant"gray10"
     )
 
     function mapToPNG(
