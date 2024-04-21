@@ -9,10 +9,7 @@ module main
     include("mapOperations.jl")
     using .mapOperations
 
-    include("clApp.jl")
-    using .clApp
-
-    export algoDijkstra, algoAstar, algoWAstar, clDijkstra, clAStar
+    export algoDijkstra, algoAstar, algoWAstar
 
     function algoDijkstra(
         fname::String,
