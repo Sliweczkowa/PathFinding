@@ -1,6 +1,4 @@
 module mapProperties
-    using Images
-
     export MapPoint
 
     mutable struct MapPoint
