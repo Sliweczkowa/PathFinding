@@ -12,7 +12,7 @@ module main
     include("clApp.jl")
     using .clApp
 
-    export algoDijkstra, algoAstar, clDijkstra, clAStar
+    export algoDijkstra, algoAstar, algoWAstar, clDijkstra, clAStar
 
     function algoDijkstra(
         fname::String,
@@ -33,4 +33,16 @@ module main
         println("The shortest found distance is: ", x[1][A[2], A[1]].distanceFromStart)
         println("Considered points: ", count(a -> a.isConsidered, x[1]))
     end
+
+    function algoWAstar(
+        fname::String,
+        D::Tuple{Int64, Int64},
+        A::Tuple{Int64, Int64},
+        weight::Float64
+    )::Nothing
+        x = waStar(loadMapFromFile(fname), D[1], D[2], A[1], A[2], weight)
+        println("The shortest found distance is: ", x[1][A[2], A[1]].distanceFromStart)
+        println("Considered points: ", count(a -> a.isConsidered, x[1]))
+    end
+
 end
