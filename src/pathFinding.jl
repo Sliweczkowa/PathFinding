@@ -49,17 +49,17 @@
             if current_x-1 > 1 &&
             isTerrainExplorable(mapInfo[current_y, current_x-1].terrainType) &&
             mapInfo[current_y, current_x-1].isVisited == false &&
-            mapInfo[current_y, current_x-1].distanceFromStart > mapInfo[current_y, current_x].distanceFromStart + 1
-                    mapInfo[current_y, current_x-1].distanceFromStart = mapInfo[current_y, current_x].distanceFromStart + 1
+            mapInfo[current_y, current_x-1].distanceFromStart > mapInfo[current_y, current_x].distanceFromStart + hashmap1[mapInfo[current_y, current_x-1].terrainType]
+                    mapInfo[current_y, current_x-1].distanceFromStart = mapInfo[current_y, current_x].distanceFromStart + hashmap1[mapInfo[current_y, current_x-1].terrainType]
                     mapInfo[current_y, current_x-1].previousLocation = (current_y, current_x)
                     push!(reachableLocations, (current_y, current_x-1))
-                    mapInfo[current_y-1, current_x].isConsidered = true
+                    mapInfo[current_y, current_x-1].isConsidered = true
             end
             if current_y-1 > 1 &&
                 isTerrainExplorable(mapInfo[current_y-1, current_x].terrainType) &&
                 mapInfo[current_y-1, current_x].isVisited == false &&
-                mapInfo[current_y-1, current_x].distanceFromStart > mapInfo[current_y, current_x].distanceFromStart + 1
-                        mapInfo[current_y-1, current_x].distanceFromStart = mapInfo[current_y, current_x].distanceFromStart + 1
+                mapInfo[current_y-1, current_x].distanceFromStart > mapInfo[current_y, current_x].distanceFromStart + hashmap1[mapInfo[current_y-1, current_x].terrainType]
+                        mapInfo[current_y-1, current_x].distanceFromStart = mapInfo[current_y, current_x].distanceFromStart + hashmap1[mapInfo[current_y-1, current_x].terrainType]
                         mapInfo[current_y-1, current_x].previousLocation = (current_y, current_x)
                         push!(reachableLocations, (current_y-1, current_x))
                         mapInfo[current_y-1, current_x].isConsidered = true
@@ -67,20 +67,20 @@
             if current_x+1 < width &&
                 isTerrainExplorable(mapInfo[current_y, current_x+1].terrainType) &&
                 mapInfo[current_y, current_x+1].isVisited == false &&
-                mapInfo[current_y, current_x+1].distanceFromStart > mapInfo[current_y, current_x].distanceFromStart + 1
-                        mapInfo[current_y, current_x+1].distanceFromStart = mapInfo[current_y, current_x].distanceFromStart + 1
+                mapInfo[current_y, current_x+1].distanceFromStart > mapInfo[current_y, current_x].distanceFromStart + hashmap1[mapInfo[current_y, current_x+1].terrainType]
+                        mapInfo[current_y, current_x+1].distanceFromStart = mapInfo[current_y, current_x].distanceFromStart + hashmap1[mapInfo[current_y, current_x+1].terrainType]
                         mapInfo[current_y, current_x+1].previousLocation = (current_y, current_x)
                         push!(reachableLocations, (current_y, current_x+1))
-                        mapInfo[current_y-1, current_x].isConsidered = true
+                        mapInfo[current_y, current_x+1].isConsidered = true
             end
             if current_y+1 < height &&
                 isTerrainExplorable(mapInfo[current_y+1, current_x].terrainType) &&
                 mapInfo[current_y+1, current_x].isVisited == false &&
-                mapInfo[current_y+1, current_x].distanceFromStart > mapInfo[current_y, current_x].distanceFromStart + 1
-                        mapInfo[current_y+1, current_x].distanceFromStart = mapInfo[current_y, current_x].distanceFromStart + 1
+                mapInfo[current_y+1, current_x].distanceFromStart > mapInfo[current_y, current_x].distanceFromStart + hashmap1[mapInfo[current_y+1, current_x].terrainType]
+                        mapInfo[current_y+1, current_x].distanceFromStart = mapInfo[current_y, current_x].distanceFromStart + hashmap1[mapInfo[current_y+1, current_x].terrainType]
                         mapInfo[current_y+1, current_x].previousLocation = (current_y, current_x)
                         push!(reachableLocations, (current_y+1, current_x))
-                        mapInfo[current_y-1, current_x].isConsidered = true
+                        mapInfo[current_y+1, current_x].isConsidered = true
             end
 
             # Analyse of current location finished
@@ -107,3 +107,13 @@
             throw(ArgumentError("Invalid map argument"))
         end
     end
+
+    hashmap1 = Dict{Char, Float64}(
+        '.' => 1.0,
+        'G' => 1.0,
+        '@' => Inf64,
+        'O' => Inf64,
+        'T' => Inf64,
+        'S' => 5.0,
+        'W' => 8.0
+    )
