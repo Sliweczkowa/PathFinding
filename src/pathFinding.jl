@@ -1,16 +1,9 @@
-# TODO: implement 0 <= weight <= 1 error
-
-module pathFinding
-    import Main.mapProperties
-
-    export waStar
-
     function waStar(
         map::Array{Char, 2},
         start_x::Int, start_y::Int,
         final_x::Int, final_y::Int,
         weight::Float64
-    )::Tuple{Array{mapProperties.MapPoint, 2}, Int, Int}
+    )::Tuple{Array{MapPoint, 2}, Int, Int}
 
         # Terrain start and finish check
         if isTerrainExplorable(map[start_y, start_x]) == false || isTerrainExplorable(map[final_y, final_x]) == false
@@ -22,10 +15,10 @@ module pathFinding
         width = size(map, 2)
 
         # Info about map initially unknown
-        mapInfo = Array{mapProperties.MapPoint, 2}(undef, height, width)
+        mapInfo = Array{MapPoint, 2}(undef, height, width)
         for i in 1:height
             for j in 1:width
-                mapInfo[i, j] = mapProperties.MapPoint(map[i, j])
+                mapInfo[i, j] = MapPoint(map[i, j])
                 mapInfo[i, j].distanceToFinal = abs(final_x - j) + abs(final_y - i)
             end  
         end
@@ -104,6 +97,7 @@ module pathFinding
         
     end
 
+
     function isTerrainExplorable(c::Char)::Bool
         if c == '@' || c == 'O' || c == 'T'
             return false
@@ -113,5 +107,3 @@ module pathFinding
             throw(ArgumentError("Invalid map argument"))
         end
     end
-
-end

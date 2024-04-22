@@ -1,8 +1,5 @@
-module mapOperations
     using Images
-    import Main.mapProperties
 
-    export loadMapFromFile, mapToPNG
 
     function loadMapFromFile(
         pathToFile::String
@@ -24,6 +21,7 @@ module mapOperations
         end
     end
 
+
     hashmap = Dict{Union{Char, String}, RGB{N0f8}}(
         '.' => colorant"white",
         'G' => colorant"white",
@@ -36,6 +34,7 @@ module mapOperations
         "visited" => colorant"gray25",
         "path" => colorant"gray10"
     )
+
 
     function mapToPNG(
         map::Array{Char, 2},
@@ -52,8 +51,9 @@ module mapOperations
 
     end
 
+
     function mapToPNG(
-        mapInfo::Array{mapProperties.MapPoint, 2},
+        mapInfo::Array{MapPoint, 2},
         final_y::Int, final_x::Int,
         filename::String
     )::Nothing
@@ -82,5 +82,3 @@ module mapOperations
         save("out/$filename.png", rgbMap)
 
     end
-
-end
